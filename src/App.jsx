@@ -5,6 +5,7 @@ import Home from './pages/Home';
 import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import OrderSummary from './pages/OrderSummary';
+import Footer from './components/Footer';
 import './App.css';
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
             <Route path="/order-summary" element={<OrderSummary />} />
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
+          <Footer />
         </CartProvider>
       </AuthProvider>
     </Router>

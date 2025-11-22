@@ -17,6 +17,9 @@ export const CartProvider = ({ children }) => {
     return savedCart ? JSON.parse(savedCart) : [];
   });
 
+  // Used to signal UI that a cart update happened (e.g. trigger a flash)
+  const [flashCounter, setFlashCounter] = useState(0);
+
   useEffect(() => {
     localStorage.setItem('cart', JSON.stringify(cartItems));
   }, [cartItems]);
@@ -35,6 +38,9 @@ export const CartProvider = ({ children }) => {
       
       return [...prevItems, { ...product, quantity: 1 }];
     });
+
+    // notify listeners (Header) that something changed
+    setFlashCounter(c => c + 1);
   };
 
   const updateQuantity = (productId, quantity) => {
@@ -74,6 +80,7 @@ export const CartProvider = ({ children }) => {
     clearCart,
     getTotalItems,
     getTotalPrice
+    ,flashCounter
   };
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

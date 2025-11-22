@@ -1,5 +1,7 @@
+/* Header styles */
 .header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  /* background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); */
+  background: linear-gradient(135deg, #e0cddf 0%, #f93a41 100%);
   color: white;
   padding: 1rem 0;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -29,6 +31,34 @@
   font-weight: 600;
 }
 
+.logo-img {
+  height: 48px;
+  cursor: pointer;
+  display: block;
+}
+
+@media (max-width: 480px) {
+  .logo-img { height: 36px; }
+}
+
+/* Center title area */
+.header-center {
+  flex: 1 1 auto;
+  text-align: center;
+}
+
+.header-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.95);
+  user-select: none;
+}
+
+@media (max-width: 700px) {
+  /* hide the center title on small screens to avoid crowding */
+  .header-center { display: none; }
+}
+
 .header-right {
   display: flex;
   align-items: center;
@@ -36,20 +66,58 @@
 }
 
 .cart-button {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.12);
   border: none;
   color: white;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 0.75rem;
   border-radius: 8px;
   cursor: pointer;
   font-size: 1rem;
   font-weight: 500;
   transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .cart-button:hover {
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.18);
   transform: translateY(-2px);
+}
+
+@keyframes cart-flash {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 rgba(255,255,255,0);
+  }
+  30% {
+    transform: scale(1.12);
+    box-shadow: 0 0 18px rgba(255,255,255,0.9);
+  }
+  60% {
+    transform: scale(0.98);
+    box-shadow: 0 0 8px rgba(255,255,255,0.5);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 rgba(255,255,255,0);
+  }
+}
+
+.cart-button.flash {
+  animation: cart-flash 700ms ease;
+}
+
+.cart-icon {
+  width: 30px;
+  height: 30px;
+  vertical-align: middle;
+}
+
+.cart-count {
+  font-weight: 700;
+  color: rgb(11, 11, 11);
+  margin-left: 0.25rem;
 }
 
 .user-menu {

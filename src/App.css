@@ -8,8 +8,13 @@
   width: 100%;
 }
 
+:root {
+  --footer-height: 56px;
+}
+
 .main-content {
   padding: 2rem 0;
+  padding-bottom: calc(2rem + var(--footer-height));
 }
 
 .container {

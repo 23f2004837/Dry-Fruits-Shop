@@ -1,14 +1,38 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import Header from '../components/Header';
 import './Checkout.css';
 
 const Checkout = () => {
+  // Set the shop's WhatsApp number here in international format (no + or leading zeros).
+  // Example: India mobile 9876543210 -> '919876543210'
+  // If left empty, the generic WhatsApp share URL (no specific recipient) will be used.
+  const WHATSAPP_NUMBER = '917276729895';
+
   const { cartItems, getTotalPrice, clearCart } = useCart();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [deliveryAddress, setDeliveryAddress] = useState('');
+  const [deliveryAddress, setDeliveryAddress] = useState(() => {
+    try {
+      return localStorage.getItem('deliveryAddress') || '';
+    } catch (e) {
+      return '';
+    }
+  });
+
+  useEffect(() => {
+    try {
+      if (deliveryAddress && deliveryAddress.trim()) {
+        localStorage.setItem('deliveryAddress', deliveryAddress);
+      } else {
+        // keep empty string in storage so we consistently remember "no address"
+        localStorage.setItem('deliveryAddress', '');
+      }
+    } catch (e) {
+      // ignore storage errors
+    }
+  }, [deliveryAddress]);
 
   const handlePlaceOrder = () => {
     if (cartItems.length === 0) {
@@ -40,9 +64,13 @@ const Checkout = () => {
 
     // Encode message for WhatsApp
     const encodedMessage = encodeURIComponent(message);
-    const whatsappUrl = `https://wa.me/?text=${encodedMessage}`;
 
-    // Open WhatsApp
+    // Build wa.me URL. Use specific number if provided, otherwise fallback to generic share.
+    const whatsappUrl = WHATSAPP_NUMBER && WHATSAPP_NUMBER.trim()
+      ? `https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`
+      : `https://wa.me/?text=${encodedMessage}`;
+
+    // Open WhatsApp (new tab)
     window.open(whatsappUrl, '_blank');
 
     // Clear cart and navigate to order summary

@@ -45,30 +45,36 @@ const Cart = () => {
                       <h3>{item.name}</h3>
                       <p className="item-price">₹{item.price}</p>
                     </div>
-                    <div className="quantity-controls">
-                      <button
-                        onClick={() => handleQuantityChange(item.id, item.quantity - 1)}
-                        className="qty-btn"
-                      >
-                        -
-                      </button>
-                      <span className="quantity">{item.quantity}</span>
-                      <button
-                        onClick={() => handleQuantityChange(item.id, item.quantity + 1)}
-                        className="qty-btn"
-                      >
-                        +
-                      </button>
+                    <div className="controls-row">
+                      <div className="quantity-controls">
+                        <button
+                          onClick={() => handleQuantityChange(item.id, item.quantity - 1)}
+                          className="qty-btn"
+                        >
+                          -
+                        </button>
+                        <span className="quantity">{item.quantity}</span>
+                        <button
+                          onClick={() => handleQuantityChange(item.id, item.quantity + 1)}
+                          className="qty-btn"
+                        >
+                          +
+                        </button>
+                      </div>
+
+                      <div className="item-actions">
+                        <div className="item-total">
+                          ₹{item.price * item.quantity}
+                        </div>
+                        <button
+                          onClick={() => removeFromCart(item.id)}
+                          className="remove-btn"
+                          aria-label={`Remove ${item.name}`}
+                        >
+                          ×
+                        </button>
+                      </div>
                     </div>
-                    <div className="item-total">
-                      ₹{item.price * item.quantity}
-                    </div>
-                    <button
-                      onClick={() => removeFromCart(item.id)}
-                      className="remove-btn"
-                    >
-                      ×
-                    </button>
                   </div>
                 ))}
               </div>
