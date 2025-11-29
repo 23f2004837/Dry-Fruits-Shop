@@ -1,0 +1,41 @@
+.app-splash {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, #ffffff, #f7f9ff);
+  z-index: 2000;
+  transition: opacity 400ms ease, visibility 400ms ease;
+  opacity: 1;
+}
+
+.app-splash.fade {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.splash-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.splash-logo {
+  width: 160px;
+  max-width: 50vw;
+  height: auto;
+  display: block;
+}
+
+.splash-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #0b5fff;
+}
+
+@media (max-width: 480px) {
+  .splash-logo { width: 140px; }
+  .splash-title { font-size: 1rem; }
+}

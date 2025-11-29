@@ -1,0 +1,58 @@
+.install-banner {
+  position: fixed;
+  left: 12px;
+  right: 12px;
+  bottom: 72px; /* sits above footer */
+  z-index: 1200;
+  display: flex;
+  justify-content: center;
+}
+
+.install-content {
+  background: linear-gradient(90deg, #0b5fff, #3a67ff);
+  color: white;
+  padding: 0.6rem 0.8rem;
+  border-radius: 10px;
+  box-shadow: 0 6px 20px rgba(11,95,255,0.18);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  max-width: 720px;
+}
+
+.install-text {
+  flex: 1 1 auto;
+  font-size: 0.95rem;
+}
+
+.install-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.install-btn {
+  background: white;
+  color: #0b5fff;
+  border: none;
+  padding: 0.45rem 0.7rem;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.install-btn:active { transform: translateY(1px); }
+
+.install-close {
+  background: transparent;
+  border: none;
+  color: rgba(255,255,255,0.9);
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+@media (max-width: 480px) {
+  .install-content { padding: 0.6rem; }
+  .install-text { font-size: 0.9rem; }
+}
