@@ -20,8 +20,7 @@ api.interceptors.request.use((config) => {
 
 export const authAPI = {
   getCurrentUser: () => api.get('/auth/me'),
-  completeRegistration: (token, flatNumber) => 
-    api.post('/auth/complete-registration', { token, flatNumber }),
+  completeRegistration: (payload) => api.post('/auth/complete-registration', payload),
   logout: () => api.post('/auth/logout')
 };
 

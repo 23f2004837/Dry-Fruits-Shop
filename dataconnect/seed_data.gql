@@ -1,0 +1,44 @@
+mutation CreateDemoData @transaction @auth(level: PUBLIC, insecureReason: "This operation is only used to seed the database with demo data") {
+  user_insertMany(data: [
+    {
+      id: "550e8400-e29b-41d4-a716-446655440000",
+      displayName: "demouser1",
+      createdAt: "2024-04-26T10:00:00Z"
+    },
+    {
+      id: "550e8400-e29b-41d4-a716-446655440001",
+      displayName: "demouser2",
+      createdAt: "2024-04-26T10:00:00Z"
+    }
+  ])
+  movie_insertMany(data: [
+    {
+      id: "550e8400-e29b-41d4-a716-446655440002",
+      title: "Example Movie 1",
+      year: 2023,
+      createdAt: "2024-04-26T10:00:00Z"
+    },
+    {
+      id: "550e8400-e29b-41d4-a716-446655440003",
+      title: "Example Movie 2",
+      year: 2024,
+      createdAt: "2024-04-26T10:00:00Z"
+    }
+  ])
+  watch_insertMany(data: [
+    {
+      id: "550e8400-e29b-41d4-a716-446655440004",
+      userId: "550e8400-e29b-41d4-a716-446655440000",
+      movieId: "550e8400-e29b-41d4-a716-446655440002",
+      watchDate: "2024-04-27",
+      createdAt: "2024-04-26T10:00:00Z"
+    },
+    {
+      id: "550e8400-e29b-41d4-a716-446655440005",
+      userId: "550e8400-e29b-41d4-a716-446655440001",
+      movieId: "550e8400-e29b-41d4-a716-446655440003",
+      watchDate: "2024-04-28",
+      createdAt: "2024-04-26T10:00:00Z"
+    }
+  ])
+}

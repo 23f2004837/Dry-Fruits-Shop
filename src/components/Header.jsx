@@ -1,14 +1,22 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import { useAuth } from '../context/AuthContext';
 import './Header.css';
 import baner from '../assets/baner-header.png';
 import cartIcon from '../assets/shopping-cart.png';
+import OrdersModal from './OrdersModal';
+import ProfileModal from './ProfileModal';
 
 const Header = () => {
   const { getTotalItems, flashCounter } = useCart();
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [isFlashing, setIsFlashing] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [ordersOpen, setOrdersOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
+  const menuRef = useRef(null);
 
   useEffect(() => {
     if (!flashCounter) return;
@@ -16,6 +24,40 @@ const Header = () => {
     const t = setTimeout(() => setIsFlashing(false), 700);
     return () => clearTimeout(t);
   }, [flashCounter]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setMenuOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const toggleMenu = () => setMenuOpen((prev) => !prev);
+
+  const handleProfile = () => {
+    setMenuOpen(false);
+    setProfileOpen(true);
+  };
+
+  const handleOrders = () => {
+    setMenuOpen(false);
+    setOrdersOpen(true);
+  };
+
+  const handleLogout = async () => {
+    setMenuOpen(false);
+    await logout();
+    navigate('/login');
+  };
+
+  const getInitials = () => {
+    if (!user?.name && !user?.email) return 'U';
+    const source = user?.name || user?.email;
+    return source.charAt(0).toUpperCase();
+  };
 
   return (
     <header className="header">
@@ -44,8 +86,39 @@ const Header = () => {
             <img src={cartIcon} alt="cart" className="cart-icon" />
             <span className="cart-count">{getTotalItems()}</span>
           </button>
+          {user && (
+            <div className="user-menu" ref={menuRef}>
+              <button
+                className="user-avatar"
+                onClick={toggleMenu}
+                aria-label="Account menu"
+                aria-expanded={menuOpen}
+              >
+                {user.photo ? (
+                  <img src={user.photo} alt={user.name || 'Profile'} />
+                ) : (
+                  <span className="avatar-fallback">{getInitials()}</span>
+                )}
+              </button>
+              {menuOpen && (
+                <div className="dropdown-menu">
+                  <button type="button" onClick={handleProfile}>
+                    Profile
+                  </button>
+                  <button type="button" onClick={handleOrders}>
+                    Orders
+                  </button>
+                  <button type="button" onClick={handleLogout}>
+                    Logout
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
+      <OrdersModal open={ordersOpen} onClose={() => setOrdersOpen(false)} />
+      <ProfileModal open={profileOpen} onClose={() => setProfileOpen(false)} />
     </header>
   );
 };

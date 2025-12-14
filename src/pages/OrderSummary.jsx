@@ -7,6 +7,9 @@ const OrderSummary = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const orderPlaced = location.state?.orderPlaced;
+  const orderRecord = location.state?.orderRecord;
+  const totals = location.state?.totals;
+  const deliveryAddress = location.state?.deliveryAddress;
 
   useEffect(() => {
     if (!orderPlaced) {
@@ -35,18 +38,37 @@ const OrderSummary = () => {
             <div className="order-details">
               <h3>What happens next?</h3>
               
+              {orderRecord && (
+                <div className="info-box">
+                  <p>🧾 <strong>Invoice:</strong> {orderRecord.invoiceNumber}</p>
+                  <p>📦 <strong>Order ID:</strong> {orderRecord.orderId}</p>
+                </div>
+              )}
+
               <div className="info-box">
                 <p>📱 <strong>WhatsApp Sent:</strong> Your order summary has been prepared for WhatsApp</p>
                 <p>🛍️ <strong>Shop Contact:</strong> The shop will reach out to confirm your order</p>
                 <p>🚚 <strong>Delivery:</strong> Delivery details will be arranged via WhatsApp</p>
                 <p>💳 <strong>Payment:</strong> Payment options will be discussed during confirmation</p>
               </div>
+
+              {totals && (
+                <div className="info-box">
+                  <p>Subtotal: ₹{totals.subtotal.toFixed(2)}</p>
+                  <p>Tax: ₹{totals.tax.toFixed(2)}</p>
+                  <p>Total: ₹{totals.total.toFixed(2)}</p>
+                  {deliveryAddress && (
+                    <p>Deliver to: {deliveryAddress}</p>
+                  )}
+                </div>
+              )}
             </div>
             
             <div className="info-note">
               <p>
                 <strong>Note:</strong> This is a client-side application. Your cart has been cleared 
-                and your order summary was prepared for WhatsApp sharing. No data is stored on any server.
+                and your order summary was prepared for WhatsApp sharing. If you were logged in, 
+                the order and invoice were securely saved to Firebase for your history.
               </p>
             </div>
             

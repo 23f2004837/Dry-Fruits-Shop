@@ -1,0 +1,38 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    match /carts/{userId} {
+      allow read, write: if isSignedIn() && request.auth.uid == userId;
+    }
+
+    match /orders/{orderId} {
+      // FIXED: allow authenticated user to create
+      allow create: if isSignedIn();
+
+      // ensure user can only read/update their own order
+      allow read, update: if isSignedIn() && resource.data.userId == request.auth.uid;
+
+      allow delete: if false;
+    }
+
+    match /invoices/{invoiceId} {
+      // FIXED
+      allow create: if isSignedIn();
+
+      allow read, update: if isSignedIn() && resource.data.userId == request.auth.uid;
+
+      allow delete: if false;
+    }
+
+    // everything else blocked
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

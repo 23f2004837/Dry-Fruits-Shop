@@ -3,10 +3,22 @@
   background: #f5f5f5;
 }
 
-.cart-page h2 {
-  margin: 0 0 2rem 0;
+.cart-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.cart-header h2 {
+  margin: 0;
   font-size: 2rem;
   color: #333;
+}
+
+.cart-syncing {
+  font-size: 0.95rem;
+  color: #667eea;
 }
 
 .empty-cart {

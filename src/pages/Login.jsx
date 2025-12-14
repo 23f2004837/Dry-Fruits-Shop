@@ -1,34 +1,81 @@
-import { useEffect } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import './Login.css';
 
+const getFriendlyAuthError = (error) => {
+  const code = error?.code;
+  switch (code) {
+    case 'auth/unauthorized-domain':
+      return 'This origin is not authorized for Google Sign-In. Add your dev/production domains in Firebase Console → Authentication → Settings → Authorized domains.';
+    case 'auth/operation-not-supported-in-this-environment':
+      return 'Google Sign-In needs to run from HTTPS (or localhost). If you are using a LAN IP, enable HTTPS (`npm run dev -- --host --https`) or deploy to an HTTPS host.';
+    case 'auth/network-request-failed':
+      return 'Network error while contacting Google. Check your connection and try again.';
+    case 'auth/web-storage-unsupported':
+      return 'This browser blocks local storage. Enable cookies/storage or try a different browser.';
+    case 'auth/popup-blocked':
+      return 'The popup was blocked. Allow popups for this site or try again.';
+    default:
+      return 'Unable to sign in with Google. Please try again.';
+  }
+};
+
 const Login = () => {
-  const { isAuthenticated, login } = useAuth();
+  const { isAuthenticated, login, loginWithGoogle, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+  const [error, setError] = useState('');
+  const [redirecting, setRedirecting] = useState(false);
 
   useEffect(() => {
     const token = searchParams.get('token');
     if (token) {
       login(token);
-      navigate('/');
-    } else if (isAuthenticated) {
-      navigate('/');
+      navigate('/', { replace: true });
     }
-  }, [isAuthenticated, navigate, searchParams, login]);
+  }, [login, navigate, searchParams]);
 
-  const handleGoogleLogin = () => {
-    window.location.href = `${API_URL}/auth/google`;
+  useEffect(() => {
+    if (!authLoading && isAuthenticated) {
+      setRedirecting(true);
+      navigate('/', { replace: true });
+    } else {
+      setRedirecting(false);
+    }
+  }, [authLoading, isAuthenticated, navigate]);
+
+  const handleGoogleLogin = async () => {
+    setError('');
+    try {
+      const mode = await loginWithGoogle();
+      if (mode !== 'redirect') {
+        navigate('/');
+      }
+    } catch (err) {
+      console.error('Google login failed', err);
+      setError(getFriendlyAuthError(err));
+    }
   };
+
+  if (redirecting) {
+    return (
+      <div className="login-page">
+        <div className="login-container">
+          <div className="login-card">
+            <p>Redirecting you to the home page...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="login-page">
       <div className="login-container">
         <div className="login-card">
           <h1>🥜 Welcome to Dry Fruits Shop</h1>
-          <p>Sign in with your Google account to start shopping</p>
+          <p>Sign in with your Google account to start shopping 000.001</p>
           
           <button className="google-login-btn" onClick={handleGoogleLogin}>
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -41,6 +88,7 @@ const Login = () => {
           </button>
           
           <div className="login-info">
+            {error && <p className="error-message">{error}</p>}
             <p>By signing in, you agree to our Terms of Service and Privacy Policy</p>
           </div>
         </div>

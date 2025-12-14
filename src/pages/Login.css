@@ -66,3 +66,12 @@
   color: #999;
   font-size: 0.85rem;
 }
+
+.login-info .error-message {
+  color: #c62828;
+  background: #fdecea;
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}

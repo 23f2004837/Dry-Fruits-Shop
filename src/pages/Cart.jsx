@@ -4,7 +4,7 @@ import Header from '../components/Header';
 import './Cart.css';
 
 const Cart = () => {
-  const { cartItems, updateQuantity, removeFromCart, getTotalPrice } = useCart();
+  const { cartItems, updateQuantity, removeFromCart, getTotalPrice, syncing } = useCart();
   const navigate = useNavigate();
 
   const handleQuantityChange = (productId, newQuantity) => {
@@ -26,7 +26,10 @@ const Cart = () => {
       
       <main className="main-content">
         <div className="container">
-          <h2>Shopping Cart</h2>
+          <div className="cart-header">
+            <h2>Shopping Cart</h2>
+            {syncing && <span className="cart-syncing">Syncing with cloud…</span>}
+          </div>
           
           {cartItems.length === 0 ? (
             <div className="empty-cart">

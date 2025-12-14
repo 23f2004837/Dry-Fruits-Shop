@@ -25,6 +25,21 @@ npm install
 npm run dev
 ```
 
+### Firebase Authentication (Google Sign-In)
+
+This project uses Firebase Authentication for Google sign-in. Before running locally, create a Firebase project and add the web configuration values to a `.env.local` file in the project root:
+
+```bash
+VITE_FIREBASE_API_KEY=your-api-key
+VITE_FIREBASE_AUTH_DOMAIN=your-project.firebaseapp.com
+VITE_FIREBASE_PROJECT_ID=your-project-id
+VITE_FIREBASE_STORAGE_BUCKET=your-project.appspot.com
+VITE_FIREBASE_MESSAGING_SENDER_ID=sender-id
+VITE_FIREBASE_APP_ID=app-id
+```
+
+In the Firebase console, enable the **Google** provider under *Authentication → Sign-in method*. After saving the `.env.local` file, restart the dev server so Vite can pick up the environment variables.
+
 ### Building for Production
 
 ```bash
